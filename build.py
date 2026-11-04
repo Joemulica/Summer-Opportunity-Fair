@@ -32,6 +32,16 @@ def head(title, desc, full=True):
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#0b2348">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Summer Opportunity Fair">
+<meta property="og:title" content="{e(title)}">
+<meta property="og:description" content="{e(desc)}">
+<meta property="og:image" content="https://summeropportunityfair.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://summeropportunityfair.com/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://summeropportunityfair.com/og-image.png">
 <link rel="stylesheet" href="style.css">'''
     if not full: return meta
     return f'<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n{meta}\n</head>\n<body>'
@@ -221,7 +231,7 @@ if __name__ == "__main__":
     for d in ("site", "preview"):
         shutil.copy("style.css", f"{d}/style.css"); open(f"{d}/config.js", "w").write(CONFIG); open(f"{d}/site.js", "w").write(SITEJS)
     for d in ("site", "preview"):
-        for f in ("logo.png","logo-tiles.png","tile-camp.png","tile-sports.png","tile-nature.png","tile-arts.png","favicon.ico","favicon-32.png","apple-touch-icon.png","icon-512.png"):
+        for f in ("logo.png","logo-tiles.png","tile-camp.png","tile-sports.png","tile-nature.png","tile-arts.png","favicon.ico","favicon-32.png","apple-touch-icon.png","icon-512.png","og-image.png"):
             shutil.copy(f"brand/{f}", f"{d}/{f}")
     open("site/CNAME", "w").write("summeropportunityfair.com\n")
     print("built")
