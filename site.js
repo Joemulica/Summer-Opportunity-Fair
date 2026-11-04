@@ -27,24 +27,23 @@
         .then(function () { btn.disabled = false; });
     });
   }
-  var list = document.getElementById("dir-list");
-  if (list) {
-    var items = C.directory || [], q = document.getElementById("d-q"), age = document.getElementById("d-age");
-    document.getElementById("dir-empty").hidden = items.length > 0;
-    document.querySelector(".dir-tools").hidden = items.length === 0;
-    function draw() {
-      var t = (q.value || "").toLowerCase(), a = age.value;
-      list.innerHTML = "";
-      items.filter(function (x) {
-        var hay = [x.name, x.town, x.type].join(" ").toLowerCase();
-        return (!t || hay.indexOf(t) > -1) && (!a || (x.ages || []).indexOf(a) > -1);
-      }).forEach(function (x) {
-        var d = document.createElement("a"); d.className = "dir-item"; if (x.url) { d.href = x.url; d.rel = "noopener"; }
-        var h = document.createElement("strong"); h.textContent = x.name; d.appendChild(h);
-        var p = document.createElement("span"); p.textContent = [x.type, x.town, (x.ages || []).join(", ")].filter(Boolean).join(" · "); d.appendChild(p);
-        list.appendChild(d);
+  var order = document.getElementById("order");
+  if (order) {
+    var lines = document.getElementById("sum-lines"), tot = document.getElementById("sum-total"), go = document.getElementById("checkout");
+    var base = pay.CHECKOUT || "";
+    function calc() {
+      var items = [["Exhibitor table", 400]], ref = ["TABLE"];
+      order.querySelectorAll("input[type=radio]:checked").forEach(function (r) {
+        var p = +r.getAttribute("data-price");
+        r.closest(".step").querySelectorAll(".pick").forEach(function (l) { l.classList.toggle("on", l.contains(r)); });
+        if (p) { items.push([r.closest(".pick").querySelector("strong").textContent, p]); ref.push(r.value); }
       });
+      lines.innerHTML = "";
+      var sum = 0;
+      items.forEach(function (it) { sum += it[1]; var li = document.createElement("li"); var a = document.createElement("span"); a.textContent = it[0]; var b = document.createElement("span"); b.textContent = "$" + it[1]; li.appendChild(a); li.appendChild(b); lines.appendChild(li); });
+      tot.textContent = "$" + sum.toLocaleString("en-US");
+      if (base) go.href = base + (base.indexOf("?") > -1 ? "&" : "?") + "client_reference_id=" + encodeURIComponent(ref.join("-"));
     }
-    q.addEventListener("input", draw); age.addEventListener("change", draw); draw();
+    order.addEventListener("change", calc); calc();
   }
 })();

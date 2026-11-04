@@ -5,18 +5,20 @@ e = html.escape
 WHEN = "Late February 2027"
 WHERE = "Northern Westchester"
 VENUE = "Venue announced soon"
-PRICES = [
-  ("TABLE", "Exhibitor table", "$400", "A 6-foot table, two chairs and a spot in the event guide.", None),
-  ("DIRECTORY", "Online directory listing", "+$50", "Your program in the Summer Opportunity Fair online directory through summer 2027.", None),
-  ("GOLD", "Gold sponsorship", "$200", "Your banner at the fair plus placement on the website home page.", "6 spots"),
-  ("PLATINUM", "Platinum sponsorship", "$400", "Placement in every family email plus the website home page.", "3 spots"),
-]
-ZONES = [("Little Kids", "Day camps and half-day programs for preschool and early elementary."),
-         ("Big Kids", "Sleepaway, specialty, sports, arts and STEM camps."),
-         ("Teen Zone", "Counselor-in-training spots, summer jobs, pre-college and volunteering.")]
+TABLE = ("Exhibitor table", 400, "A 6-foot table, two chairs, and a free listing in the printed fair directory.")
+# Directory ad add-ons (draft prices - confirm). Printed directory: 5.5 x 8.5 in booklet.
+ADS = [("QUARTER", "Quarter-page ad", 75, "2.375 x 3.875 in"),
+       ("HALF", "Half-page ad", 125, "5 x 3.875 in"),
+       ("FULL", "Full-page ad", 225, "5 x 8 in")]
+SPONSORS = [("GOLD", "Gold sponsorship", 200, "Your banner at the fair plus placement on the website home page.", 6),
+            ("PLATINUM", "Platinum sponsorship", 400, "Placement in every family email plus the website home page.", 3)]
+DIRECTORY_PRICE = 20
+PREORDER_PRICE = 15
+AD_DEADLINE = "February 1, 2027"
 TERMS = ["Your table is confirmed once payment clears. You'll get a receipt by email.",
          "Bank transfer (ACH) at checkout is preferred. It keeps table prices low.",
          "Gold and Platinum are upgrades for exhibitors and are first come, first served.",
+         f"Listing details and ad artwork are due {AD_DEADLINE}. You'll get the upload form right after checkout.",
          "Full refund until 30 days before the fair. If the fair is snowed out, your table moves to the snow date or you get a full refund."]
 
 def head(title, desc, full=True):
@@ -25,7 +27,11 @@ def head(title, desc, full=True):
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Geist:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Geist:wght@400;500;600&display=swap">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#0b2348">
 <link rel="stylesheet" href="style.css">'''
     if not full: return meta
     return f'<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n{meta}\n</head>\n<body>'
@@ -34,46 +40,50 @@ def tail(full=True):
     return '<script src="config.js"></script>\n<script src="site.js"></script>' + ("\n</body>\n</html>\n" if full else "\n")
 
 def nav(active=""):
-    links = "".join(f'<a href="{h}"{" aria-current=\"page\"" if active==k else ""}>{t}</a>' for k,h,t in [("home","index.html","The fair"),("dir","directory.html","Directory"),("ex","exhibit.html","Exhibit")])
+    links = "".join(f'<a href="{h}"{" aria-current=\"page\"" if active==k else ""}>{t}</a>' for k,h,t in [("home","index.html","The fair"),("ex","exhibit.html","Exhibit")])
     return f'''<header class="top"><div class="wrap top-in">
-<a class="brand" href="index.html"><span class="mark sun" aria-hidden="true"></span>Summer Opportunity Fair</a>
+<a class="brand" href="index.html"><img class="brand-tiles" src="logo-tiles.png" alt="" width="82" height="20"><span>Summer Opportunity Fair</span></a>
 <nav class="nav">{links}<a class="btn small" href="index.html#rsvp">RSVP free</a></nav>
 </div><div class="bunting-strip" aria-hidden="true"></div></header>'''
 
 def footer():
     return f'''<footer class="foot"><div class="wrap foot-in">
-<div><a class="brand" href="index.html"><span class="mark sun" aria-hidden="true"></span>Summer Opportunity Fair</a>
+<div><a class="brand" href="index.html"><img class="brand-tiles" src="logo-tiles.png" alt="" width="82" height="20"><span>Summer Opportunity Fair</span></a>
 <p>{WHEN} · {WHERE}. Free for families. Presented by Resource Commons.</p></div>
-<div class="foot-links"><a href="index.html#rsvp">RSVP free</a><a href="directory.html">Online directory</a><a href="exhibit.html">Exhibit or sponsor</a><a href="https://resourcecommons.com">Resource Commons</a></div>
+<div class="foot-links"><a href="index.html#rsvp">RSVP free</a><a href="exhibit.html">Exhibit or sponsor</a><a href="https://resourcecommons.com">Resource Commons</a></div>
 </div></footer>'''
 
 def home(full=True):
-    zones = "".join(f'<div class="zone">{ICONS[a]}<h3>{e(a)}</h3><p>{e(b)}</p></div>' for a,b in ZONES)
     body = f'''{nav("home")}
 <main class="summer">
 <section class="ev-hero"><div class="wrap"><div class="panel hero-split"><div class="hero-text">
-<p class="eyebrow"><span class="live" aria-hidden="true"></span>{WHEN} · {WHERE}</p>
-<h1>Plan the whole summer in one afternoon.</h1>
+<img class="hero-logo" src="logo.png" alt="Summer Opportunity Fair" width="829" height="506">
+<p class="kicker">{WHEN} · {WHERE}</p>
+<h1>Plan the <span class="tl">whole summer</span> in one afternoon.</h1>
 <p class="lede">Day camps, sleepaway camps, classes and teen summer programs, all in one room. Meet the directors, ask your questions, and leave with a plan. Free for families.</p>
 <p class="hero-note">{VENUE} · Free for families · RSVP requested</p>
 <div class="cta"><a class="btn" href="#rsvp">RSVP free</a><a class="btn ghost" href="exhibit.html">Exhibit at the fair</a></div>
 </div><div class="hero-art" id="hero-art">{hero_scene()}</div></div></div></section>
 <section class="band"><div class="wrap">
-<div class="sec-h"><h2>Three zones, every age</h2><p>Walk straight to the programs that fit your kids.</p></div>
-<div class="three cards">{zones}</div>
-</div></section>
+<div class="sec-h"><p class="kicker">Every kind of summer</p><h2>Find the right fit</h2><p>Classic camps, sports, science and the arts, plus programs for every budget and schedule.</p></div>
+<div class="cats">
+<div class="cat orange"><img src="tile-camp.png" alt="" width="80" height="80"><h3>Camp & outdoors</h3><p>Day camps, sleepaway camps and outdoor adventure.</p></div>
+<div class="cat blue"><img src="tile-sports.png" alt="" width="80" height="80"><h3>Swim & sports</h3><p>Swim lessons, sports camps and leagues.</p></div>
+<div class="cat green"><img src="tile-nature.png" alt="" width="80" height="80"><h3>Nature & STEM</h3><p>Science, coding, gardening and nature programs.</p></div>
+<div class="cat purple"><img src="tile-arts.png" alt="" width="80" height="80"><h3>Arts & theater</h3><p>Theater, music, dance and art studios.</p></div>
+</div></div></section>
 <section class="band"><div class="wrap two">
-<div><h2>What to expect</h2><ul class="talks"><li>Camp directors and program leaders, face to face</li><li>Ten-minute camp demos on the stage</li><li>A play area and activities for the kids</li><li>Early sign-up deals from exhibitors</li></ul></div>
-<div><h2>Can't wait for February?</h2><p class="small-note">The online directory lists every exhibiting program, with ages, location and how to sign up.</p><a class="btn ghost" href="directory.html">Browse the directory</a></div>
+<div><h2>What to expect</h2><ul class="talks"><li>Camp directors and program leaders, face to face</li><li>Day, sleepaway, specialty and teen programs in one room</li><li>Time to ask about dates, costs, hours and transportation</li><li>Programs for a range of ages, interests and budgets</li></ul></div>
+<div><h2>Take the whole fair home</h2><p class="small-note">The printed fair directory lists every exhibitor, with ages, location and how to sign up. Pre-order for ${PREORDER_PRICE} and pick it up at check-in, or buy it at the fair for ${DIRECTORY_PRICE}.</p><div class="cta"><a class="btn" data-link="pay-PREORDER" href="#">Pre-order for ${PREORDER_PRICE}</a></div></div>
 </div></section>
 <section class="band" id="rsvp"><div class="wrap">
 <div class="signup-card">
 <div class="sec-h"><h2>RSVP and get the exhibitor list first</h2><p>We'll email you the date, venue, exhibitor list and stage schedule before the fair. Nothing else.</p></div>
 <form id="kit-form" class="kit" novalidate>
 <fieldset><legend>My kids are</legend><div class="chks">
-<label class="chk"><input type="checkbox" name="interest" value="Little Kids" id="i-little"><span>Preschool to 2nd grade</span></label>
-<label class="chk"><input type="checkbox" name="interest" value="Big Kids" id="i-big"><span>3rd to 8th grade</span></label>
-<label class="chk"><input type="checkbox" name="interest" value="Teens" id="i-teen"><span>High school</span></label></div></fieldset>
+<label class="chk"><input type="checkbox" name="interest" value="Preschool to 2nd grade" id="i-little"><span>Preschool to 2nd grade</span></label>
+<label class="chk"><input type="checkbox" name="interest" value="3rd to 8th grade" id="i-big"><span>3rd to 8th grade</span></label>
+<label class="chk"><input type="checkbox" name="interest" value="High school" id="i-teen"><span>High school</span></label></div></fieldset>
 <div class="row"><label class="fld"><span>First name</span><input id="f-name" name="first_name" autocomplete="given-name"></label>
 <label class="fld"><span>Email</span><input id="f-email" name="email_address" type="email" autocomplete="email" required></label></div>
 <div class="row end"><button class="btn" type="submit" id="f-submit">RSVP free</button><p class="small-note" id="f-msg" role="status">We never sell or share your email.</p></div>
@@ -83,7 +93,8 @@ def home(full=True):
 <div class="sec-h"><h2>Questions</h2></div>
 <div class="faq">
 <details><summary>Does it cost anything for families?</summary><p>No. The fair is always free for families.</p></details>
-<details><summary>Can I bring my kids?</summary><p>Yes. There's a play area and activities so parents can talk with camp directors.</p></details>
+<details><summary>Can I bring my kids?</summary><p>Yes, kids are welcome.</p></details>
+<details><summary>Is there a directory?</summary><p>Yes. The printed fair directory lists every exhibitor. Pre-order it online for ${PREORDER_PRICE} and pick it up at check-in, or buy it at the fair for ${DIRECTORY_PRICE}.</p></details>
 <details><summary>Is the venue accessible?</summary><p>Yes. We choose venues with step-free access, accessible restrooms and nearby parking.</p></details>
 <details><summary>What if it snows?</summary><p>There's a published snow date. Everyone who RSVPs gets an email if anything changes.</p></details>
 </div></div></section>
@@ -92,59 +103,62 @@ def home(full=True):
     return head("Summer Opportunity Fair", "Westchester's summer camp and teen opportunity fair. Day camps, sleepaway camps, classes and teen programs in one room. Free for families.", full) + "\n" + body + "\n" + tail(full)
 
 def exhibit():
-    opts = "".join(f'''<div class="opt"><div class="opt-h"><h3>{e(n)}</h3><span class="opt-p">{e(p)}</span></div>
-<p>{e(d)}</p>{f'<span class="pill cap">{e(cap)}</span>' if cap else ''}<a class="btn" data-link="pay-{k}" href="#">{"Reserve a table" if k=="TABLE" else "Add " + e(n.split(" ")[0].lower()) if k!="DIRECTORY" else "Add a listing"}</a></div>''' for k,n,p,d,cap in PRICES)
+    adopts = '<label class="pick"><input type="radio" name="ad" value="" data-price="0" id="ad-none" checked><span class="pick-b"><strong>No ad</strong><span>Free listing only</span></span><span class="pick-p">$0</span></label>' + "".join(
+        f'<label class="pick"><input type="radio" name="ad" value="{k}" data-price="{p}" id="ad-{k.lower()}"><span class="pick-b"><strong>{e(n)}</strong><span>{e(sz)}</span></span><span class="pick-p">${p}</span></label>' for k,n,p,sz in ADS)
+    spopts = '<label class="pick"><input type="radio" name="sp" value="" data-price="0" id="sp-none" checked><span class="pick-b"><strong>No sponsorship</strong><span>&nbsp;</span></span><span class="pick-p">$0</span></label>' + "".join(
+        f'<label class="pick"><input type="radio" name="sp" value="{k}" data-price="{p}" id="sp-{k.lower()}"><span class="pick-b"><strong>{e(n)}</strong><span>{e(d)} {c} spots.</span></span><span class="pick-p">${p}</span></label>' for k,n,p,d,c in SPONSORS)
     terms = "".join(f"<li>{e(t)}</li>" for t in TERMS)
-    body = f'''{nav("ex")}
+    specs = "".join(f"<tr><td>{e(n)}</td><td>{e(sz)}</td><td class='num'>${p}</td></tr>" for k,n,p,sz in ADS)
+    body = f"""{nav("ex")}
 <main class="summer">
 <section class="ev-hero"><div class="wrap"><div class="panel slim">
-<p class="eyebrow">Exhibitors and sponsors · {WHEN}</p>
+<p class="kicker">Exhibitors and sponsors · {WHEN}</p>
 <h1>Meet the families planning their summer.</h1>
-<p class="lede">Camps, classes and teen programs get a table in front of Westchester families at the moment they're choosing.</p>
+<p class="lede">Camps, classes and teen programs get a table in front of Westchester families at the moment they're choosing. Every exhibitor gets a free listing in the printed fair directory.</p>
 </div></div></section>
 <section class="band"><div class="wrap">
-<div class="sec-h"><h2>Pricing</h2><p>Start with a table, then add what you need.</p></div>
-<div class="opts">{opts}</div>
-<div class="ach"><span class="ic" aria-hidden="true">ACH</span><div><h3>Pay by bank if you can</h3><p>Checkout offers card or bank transfer. Bank transfer keeps fees, and table prices, low.</p></div></div>
+<div class="sec-h"><p class="kicker">Reserve your table</p><h2>Build your order</h2><p>Pick your add-ons, then continue to secure checkout.</p></div>
+<div class="order">
+<form class="steps" id="order" novalidate>
+<fieldset class="step"><legend><span class="n">1</span>Exhibitor table</legend>
+<label class="pick on"><input type="checkbox" checked disabled id="tbl"><span class="pick-b"><strong>{e(TABLE[0])}</strong><span>{e(TABLE[2])}</span></span><span class="pick-p">${TABLE[1]}</span></label></fieldset>
+<fieldset class="step"><legend><span class="n">2</span>Featured ad in the printed directory <em>optional</em></legend>{adopts}</fieldset>
+<fieldset class="step"><legend><span class="n">3</span>Sponsorship <em>optional</em></legend>{spopts}</fieldset>
+</form>
+<aside class="summary" aria-live="polite">
+<h3>Your order</h3>
+<ul id="sum-lines"></ul>
+<div class="sum-total"><span>Total</span><strong id="sum-total">${TABLE[1]}</strong></div>
+<a class="btn" id="checkout" data-link="pay-CHECKOUT" href="#">Continue to checkout</a>
+<p class="small-note">You'll confirm these add-ons on the secure Stripe checkout page. Card or bank transfer.</p>
+</aside>
+</div>
+<div class="ach"><span class="ic" aria-hidden="true">ACH</span><div><h3>Pay by bank if you can</h3><p>Bank transfer keeps fees, and table prices, low.</p></div></div>
 </div></section>
 <section class="band"><div class="wrap two">
+<div><h2>Directory ad sizes</h2><div class="tbl"><table><thead><tr><th>Ad</th><th>Size</th><th class="num">Price</th></tr></thead><tbody>{specs}</tbody></table></div>
+<p class="small-note">The directory is a 5.5 x 8.5 in booklet. Send a print-ready PDF or high-resolution image by {AD_DEADLINE}. Need help with a design? Ask us.</p></div>
 <div><h2>Payment terms</h2><ul class="talks">{terms}</ul></div>
-<div><h2>Local business?</h2><p class="small-note">Pediatric practices, banks, realtors and other local businesses can sponsor the whole fair. Ask about presenting sponsorship.</p><a class="btn ghost" data-link="contact" href="#">Ask about sponsorship</a>
-<h2>Need an invoice?</h2><p class="small-note">Schools, districts and nonprofits can pay by check or ACH invoice.</p><a class="btn ghost" data-link="contact" href="#">Request an invoice</a></div>
+</div></section>
+<section class="band"><div class="wrap two">
+<div><h2>Local business?</h2><p class="small-note">Pediatric practices, banks, realtors and other local businesses can sponsor the whole fair. Ask about presenting sponsorship.</p><a class="btn ghost" data-link="contact" href="#">Ask about sponsorship</a></div>
+<div><h2>Need an invoice?</h2><p class="small-note">Schools, districts and nonprofits can pay by check or ACH invoice.</p><a class="btn ghost" data-link="contact" href="#">Request an invoice</a></div>
 </div></section>
 </main>
-{footer()}'''
-    return head("Exhibit · Summer Opportunity Fair", "Exhibitor tables, directory listings and sponsorships for the Summer Opportunity Fair in Westchester.") + "\n" + body + "\n" + tail()
-
-def directory():
-    body = f'''{nav("dir")}
-<main class="summer">
-<section class="hero"><div class="wrap">
-<p class="eyebrow">Online directory · Summer 2027</p>
-<h1>Every program at the fair, <span class="hl">in one list.</span></h1>
-<p class="lede">Filter by age and type of program. Listings go up as exhibitors sign on.</p>
-</div></section>
-<section class="band"><div class="wrap">
-<div class="dir-tools"><label class="fld"><span>Search</span><input id="d-q" placeholder="Camp name, town or activity"></label>
-<label class="fld"><span>Ages</span><select id="d-age"><option value="">All ages</option><option>Little Kids</option><option>Big Kids</option><option>Teens</option></select></label></div>
-<div id="dir-list" class="dir-list"></div>
-<div id="dir-empty" class="split"><div><h2>Listings open soon</h2><p>Camps and programs can add a listing for $50 when they reserve a table. RSVP and we'll email you when the directory goes live.</p></div><div class="cta"><a class="btn" href="index.html#rsvp">RSVP free</a><a class="btn ghost" href="exhibit.html">List your program</a></div></div>
-</div></section>
-</main>
-{footer()}'''
-    return head("Directory · Summer Opportunity Fair", "Online directory of camps, classes and teen programs exhibiting at the Summer Opportunity Fair.") + "\n" + body + "\n" + tail()
+{footer()}"""
+    return head("Exhibit · Summer Opportunity Fair", "Reserve an exhibitor table, directory ad or sponsorship for the Summer Opportunity Fair in Westchester.") + "\n" + body + "\n" + tail()
 
 CONFIG = """// Summer Opportunity Fair settings. Paste links here; blank ones show "opening soon".
 window.SOF = {
   heroPhoto: "",            // optional: a real photo (e.g. "images/hero.jpg") replaces the illustration
   kitFormId: "",            // Kit form number, from app.kit.com/forms/1234567
   contact: "",              // sponsorship / invoice request form (Tally or Google Forms)
-  pay: {                    // Stripe Payment Links. Name products "SOF27 ..." for the reconciliation workbook.
-    TABLE: "", DIRECTORY: "", GOLD: "", PLATINUM: ""
-  },
-  // Directory listings. Add one line per paid listing, e.g.
-  // { name: "Camp Example", ages: ["Big Kids"], town: "Ossining", type: "Day camp", url: "https://..." },
-  directory: []
+  // One Stripe Payment Link for the table. In Stripe, add the ad sizes and sponsorships
+  // to that link as optional items so camps can tick them at checkout.
+  // Name products "SOF27 Exhibitor table", "SOF27 Quarter-page ad", etc. for the reconciliation workbook.
+  pay: { CHECKOUT: "", PREORDER: "" },  // PREORDER = Stripe link for the $15 directory pre-order ("SOF27 Directory pre-order")
+  // After checkout, Stripe should send camps here to submit listing details and ad artwork:
+  listingForm: "",
 };
 """
 SITEJS = r"""(function () {
@@ -176,36 +190,38 @@ SITEJS = r"""(function () {
         .then(function () { btn.disabled = false; });
     });
   }
-  var list = document.getElementById("dir-list");
-  if (list) {
-    var items = C.directory || [], q = document.getElementById("d-q"), age = document.getElementById("d-age");
-    document.getElementById("dir-empty").hidden = items.length > 0;
-    document.querySelector(".dir-tools").hidden = items.length === 0;
-    function draw() {
-      var t = (q.value || "").toLowerCase(), a = age.value;
-      list.innerHTML = "";
-      items.filter(function (x) {
-        var hay = [x.name, x.town, x.type].join(" ").toLowerCase();
-        return (!t || hay.indexOf(t) > -1) && (!a || (x.ages || []).indexOf(a) > -1);
-      }).forEach(function (x) {
-        var d = document.createElement("a"); d.className = "dir-item"; if (x.url) { d.href = x.url; d.rel = "noopener"; }
-        var h = document.createElement("strong"); h.textContent = x.name; d.appendChild(h);
-        var p = document.createElement("span"); p.textContent = [x.type, x.town, (x.ages || []).join(", ")].filter(Boolean).join(" · "); d.appendChild(p);
-        list.appendChild(d);
+  var order = document.getElementById("order");
+  if (order) {
+    var lines = document.getElementById("sum-lines"), tot = document.getElementById("sum-total"), go = document.getElementById("checkout");
+    var base = pay.CHECKOUT || "";
+    function calc() {
+      var items = [["Exhibitor table", 400]], ref = ["TABLE"];
+      order.querySelectorAll("input[type=radio]:checked").forEach(function (r) {
+        var p = +r.getAttribute("data-price");
+        r.closest(".step").querySelectorAll(".pick").forEach(function (l) { l.classList.toggle("on", l.contains(r)); });
+        if (p) { items.push([r.closest(".pick").querySelector("strong").textContent, p]); ref.push(r.value); }
       });
+      lines.innerHTML = "";
+      var sum = 0;
+      items.forEach(function (it) { sum += it[1]; var li = document.createElement("li"); var a = document.createElement("span"); a.textContent = it[0]; var b = document.createElement("span"); b.textContent = "$" + it[1]; li.appendChild(a); li.appendChild(b); lines.appendChild(li); });
+      tot.textContent = "$" + sum.toLocaleString("en-US");
+      if (base) go.href = base + (base.indexOf("?") > -1 ? "&" : "?") + "client_reference_id=" + encodeURIComponent(ref.join("-"));
     }
-    q.addEventListener("input", draw); age.addEventListener("change", draw); draw();
+    order.addEventListener("change", calc); calc();
   }
 })();
 """
 if __name__ == "__main__":
     for d in ("site", "preview"):
         shutil.rmtree(d, ignore_errors=True); os.makedirs(d)
-    pages = {"exhibit.html": exhibit(), "directory.html": directory()}
+    pages = {"exhibit.html": exhibit()}
     for n, t in pages.items():
         for d in ("site", "preview"): open(f"{d}/{n}", "w").write(t)
     open("site/index.html", "w").write(home()); open("preview/index.html", "w").write(home(False))
     for d in ("site", "preview"):
         shutil.copy("style.css", f"{d}/style.css"); open(f"{d}/config.js", "w").write(CONFIG); open(f"{d}/site.js", "w").write(SITEJS)
+    for d in ("site", "preview"):
+        for f in ("logo.png","logo-tiles.png","tile-camp.png","tile-sports.png","tile-nature.png","tile-arts.png","favicon.ico","favicon-32.png","apple-touch-icon.png","icon-512.png"):
+            shutil.copy(f"brand/{f}", f"{d}/{f}")
     open("site/CNAME", "w").write("summeropportunityfair.com\n")
     print("built")

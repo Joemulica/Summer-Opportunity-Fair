@@ -3,10 +3,10 @@ window.SOF = {
   heroPhoto: "",            // optional: a real photo (e.g. "images/hero.jpg") replaces the illustration
   kitFormId: "",            // Kit form number, from app.kit.com/forms/1234567
   contact: "",              // sponsorship / invoice request form (Tally or Google Forms)
-  pay: {                    // Stripe Payment Links. Name products "SOF27 ..." for the reconciliation workbook.
-    TABLE: "", DIRECTORY: "", GOLD: "", PLATINUM: ""
-  },
-  // Directory listings. Add one line per paid listing, e.g.
-  // { name: "Camp Example", ages: ["Big Kids"], town: "Ossining", type: "Day camp", url: "https://..." },
-  directory: []
+  // One Stripe Payment Link for the table. In Stripe, add the ad sizes and sponsorships
+  // to that link as optional items so camps can tick them at checkout.
+  // Name products "SOF27 Exhibitor table", "SOF27 Quarter-page ad", etc. for the reconciliation workbook.
+  pay: { CHECKOUT: "", PREORDER: "" },  // PREORDER = Stripe link for the $15 directory pre-order ("SOF27 Directory pre-order")
+  // After checkout, Stripe should send camps here to submit listing details and ad artwork:
+  listingForm: "",
 };
