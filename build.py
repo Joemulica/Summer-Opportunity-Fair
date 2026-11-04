@@ -18,7 +18,7 @@ AD_DEADLINE = "February 1, 2027"
 TERMS = ["Your table is confirmed once payment clears. You'll get a receipt by email.",
          "Bank transfer (ACH) at checkout is preferred. It keeps table prices low.",
          "Gold and Platinum are upgrades for exhibitors and are first come, first served.",
-         f"Listing details and ad artwork are due {AD_DEADLINE}. You'll get the upload form right after checkout.",
+         f"Listing details and ad artwork are due {AD_DEADLINE}. We'll email you after checkout to collect them.",
          "Full refund until 30 days before the fair. If the fair is snowed out, your table moves to the snow date or you get a full refund."]
 
 def head(title, desc, full=True):
@@ -59,7 +59,7 @@ def nav(active=""):
 def footer():
     return f'''<footer class="foot"><div class="wrap foot-in">
 <div><a class="brand" href="index.html"><img class="brand-tiles" src="logo-tiles.png" alt="" width="82" height="20"><span>Summer Opportunity Fair</span></a>
-<p>{WHEN} · {WHERE}. Free for families. Presented by Resource Commons.</p></div>
+<p>{WHEN} · {WHERE}. Free for families. Presented by Resource Commons.</p><p>Questions? joe@summeropportunityfair.com</p></div>
 <div class="foot-links"><a href="index.html#rsvp">RSVP free</a><a href="exhibit.html">Exhibit or sponsor</a><a href="https://resourcecommons.com">Resource Commons</a></div>
 </div></footer>'''
 
@@ -106,6 +106,7 @@ def home(full=True):
 <details><summary>Can I bring my kids?</summary><p>Yes, kids are welcome.</p></details>
 <details><summary>Is there a directory?</summary><p>Yes. The printed fair directory lists every exhibitor. Pre-order it online for ${PREORDER_PRICE} and pick it up at check-in, or buy it at the fair for ${DIRECTORY_PRICE}.</p></details>
 <details><summary>Is the venue accessible?</summary><p>Yes. We choose venues with step-free access, accessible restrooms and nearby parking.</p></details>
+<details><summary>Who do I contact with questions?</summary><p>Email joe@summeropportunityfair.com.</p></details>
 <details><summary>What if it snows?</summary><p>There's a published snow date. Everyone who RSVPs gets an email if anything changes.</p></details>
 </div></div></section>
 </main>
@@ -127,23 +128,15 @@ def exhibit():
 <p class="lede">Camps, classes and teen programs get a table in front of Westchester families at the moment they're choosing. Every exhibitor gets a free listing in the printed fair directory.</p>
 </div></div></section>
 <section class="band"><div class="wrap">
-<div class="sec-h"><p class="kicker">Reserve your table</p><h2>Build your order</h2><p>Pick your add-ons, then continue to secure checkout.</p></div>
-<div class="order">
-<form class="steps" id="order" novalidate>
-<fieldset class="step"><legend><span class="n">1</span>Exhibitor table</legend>
-<label class="pick on"><input type="checkbox" checked disabled id="tbl"><span class="pick-b"><strong>{e(TABLE[0])}</strong><span>{e(TABLE[2])}</span></span><span class="pick-p">${TABLE[1]}</span></label></fieldset>
-<fieldset class="step"><legend><span class="n">2</span>Featured ad in the printed directory <em>optional</em></legend>{adopts}</fieldset>
-<fieldset class="step"><legend><span class="n">3</span>Sponsorship <em>optional</em></legend>{spopts}</fieldset>
-</form>
-<aside class="summary" aria-live="polite">
-<h3>Your order</h3>
-<ul id="sum-lines"></ul>
-<div class="sum-total"><span>Total</span><strong id="sum-total">${TABLE[1]}</strong></div>
-<a class="btn" id="checkout" data-link="pay-CHECKOUT" href="#">Continue to checkout</a>
-<p class="small-note">You'll confirm these add-ons on the secure Stripe checkout page. Card or bank transfer.</p>
-</aside>
-</div>
+<div class="sec-h"><p class="kicker">Step 1</p><h2>Reserve your table</h2><p>Every table includes a free listing in the printed fair directory.</p></div>
+<div class="opt table-opt"><div class="opt-h"><h3>{e(TABLE[0])}</h3><span class="opt-p">${TABLE[1]}</span></div><p>{e(TABLE[2])}</p><a class="btn" data-link="pay-TABLE" href="#">Reserve a table</a></div>
+<div class="sec-h"><p class="kicker">Step 2 · optional</p><h2>Add a featured ad</h2><p>Stand out in the printed directory families take home. Each ad checks out separately. Use the same email as your table so we can match them.</p></div>
+<div class="opts">{"".join(f'<div class="opt"><div class="opt-h"><h3>{e(n)}</h3><span class="opt-p">${p}</span></div><p>{e(sz)}. Artwork due {AD_DEADLINE}.</p><a class="btn" data-link="pay-{k}" href="#">Add {e(n.split("-")[0].lower())}-page ad</a></div>' for k,n,p,sz in ADS)}</div>
 <div class="ach"><span class="ic" aria-hidden="true">ACH</span><div><h3>Pay by bank if you can</h3><p>Bank transfer keeps fees, and table prices, low.</p></div></div>
+</div></section>
+<section class="band"><div class="wrap">
+<div class="sec-h"><p class="kicker">Step 3 · optional</p><h2>Add a sponsorship</h2><p>First come, first served. Each checks out separately.</p></div>
+<div class="opts">{"".join(f'<div class="opt"><div class="opt-h"><h3>{e(n)}</h3><span class="opt-p">${p}</span></div><p>{e(d)}</p><span class="pill cap">{c} spots</span><a class="btn" data-link="pay-{k}" href="#">Buy {e(n.split()[0])}</a></div>' for k,n,p,d,c in SPONSORS)}</div>
 </div></section>
 <section class="band"><div class="wrap two">
 <div><h2>Directory ad sizes</h2><div class="tbl"><table><thead><tr><th>Ad</th><th>Size</th><th class="num">Price</th></tr></thead><tbody>{specs}</tbody></table></div>
@@ -151,8 +144,8 @@ def exhibit():
 <div><h2>Payment terms</h2><ul class="talks">{terms}</ul></div>
 </div></section>
 <section class="band"><div class="wrap two">
-<div><h2>Local business?</h2><p class="small-note">Pediatric practices, banks, realtors and other local businesses can sponsor the whole fair. Ask about presenting sponsorship.</p><a class="btn ghost" data-link="contact" href="#">Ask about sponsorship</a></div>
-<div><h2>Need an invoice?</h2><p class="small-note">Schools, districts and nonprofits can pay by check or ACH invoice.</p><a class="btn ghost" data-link="contact" href="#">Request an invoice</a></div>
+<div><h2>Local business?</h2><p class="small-note">Pediatric practices, banks, realtors and other local businesses can sponsor the whole fair. Ask about presenting sponsorship at joe@summeropportunityfair.com.</p><a class="btn ghost" data-link="contact" href="#">Ask about sponsorship</a></div>
+<div><h2>Need an invoice?</h2><p class="small-note">Schools, districts and nonprofits can pay by check or ACH invoice. Email joe@summeropportunityfair.com.</p><a class="btn ghost" data-link="contact" href="#">Request an invoice</a></div>
 </div></section>
 </main>
 {footer()}"""
@@ -162,11 +155,19 @@ CONFIG = """// Summer Opportunity Fair settings. Paste links here; blank ones sh
 window.SOF = {
   heroPhoto: "",            // optional: a real photo (e.g. "images/hero.jpg") replaces the illustration
   kitFormId: "",            // Kit form number, from app.kit.com/forms/1234567
-  contact: "",              // sponsorship / invoice request form (Tally or Google Forms)
+  contact: "mailto:joe@summeropportunityfair.com",   // sponsorship / invoice requests (swap for a form link later)
   // One Stripe Payment Link for the table. In Stripe, add the ad sizes and sponsorships
   // to that link as optional items so camps can tick them at checkout.
   // Name products "SOF27 Exhibitor table", "SOF27 Quarter-page ad", etc. for the reconciliation workbook.
-  pay: { CHECKOUT: "", PREORDER: "" },  // PREORDER = Stripe link for the $15 directory pre-order ("SOF27 Directory pre-order")
+  pay: {
+    TABLE: "https://buy.stripe.com/dRm00jeLYf3i6nIbh98og06",
+    QUARTER: "https://buy.stripe.com/aFa00javIcVadQagBt8og05",
+    HALF: "https://buy.stripe.com/cNi7sL6fsf3i3bw4SL8og04",
+    FULL: "https://buy.stripe.com/7sY4gz47k1cs6nI70T8og03",
+    PREORDER: "https://buy.stripe.com/14AfZh8nAaN2bI20Cv8og00",
+    GOLD: "https://buy.stripe.com/fZu14n8nA3kA7rM4SL8og02",
+    PLATINUM: "https://buy.stripe.com/9B6aEXdHUf3i9zU70T8og01"
+  },  // PREORDER = Stripe link for the $15 directory pre-order ("SOF27 Directory pre-order")
   // After checkout, Stripe should send camps here to submit listing details and ad artwork:
   listingForm: "",
 };
