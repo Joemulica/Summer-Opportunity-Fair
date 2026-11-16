@@ -38,46 +38,37 @@
 <section class="band"><div class="wrap">
 <div class="sec-h"><p class="kicker">Reserve your table</p><h2>One form, one payment</h2><p>Here's what's available. You pick your add-ons in the sign-up form, and pay once at the end.</p></div>
 <style>
-.plist { border: 1px solid var(--line); border-radius: var(--r); background: var(--card); padding: 8px 26px; max-width: 760px; }
-.plist h3 { font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 18px 0 4px; }
-.plist ul { list-style: none; margin: 0; padding: 0; }
-.plist li { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 12px 0; border-bottom: 1px dashed var(--line); }
-.plist li:last-child { border-bottom: 0; }
-.plist .nm { font-weight: 600; }
-.plist .ds { display: block; color: var(--muted); font-size: .92rem; font-weight: 400; margin-top: 2px; }
-.plist .pr { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.art-note { max-width: 760px; margin-top: 18px; padding: 16px 20px; border-radius: var(--r); background: var(--card); border-left: 5px solid #e2823a; }
-.art-note a { font-weight: 600; }
-.btn.big { min-height: 58px; padding: 0 34px; font-size: 1.08rem; }
+.ex-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 860px) { .ex-grid { grid-template-columns: 1fr; } }
+.sheet { position: relative; overflow: hidden; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 34px clamp(20px, 4vw, 36px) 18px; box-shadow: 0 30px 70px -50px rgba(11,35,72,.45); }
+.sheet::before { content: ""; position: absolute; inset: 0 0 auto; height: 8px; background: linear-gradient(90deg, var(--orange) 0 25%, var(--blue) 0 50%, var(--green) 0 75%, var(--purple) 0); }
+.sheet h3 { display: flex; align-items: center; gap: 10px; font: 800 .74rem/1 var(--display); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 26px 0 6px; }
+.sheet h3:first-child { margin-top: 0; }
+.sheet h3::before { content: ""; width: 10px; height: 10px; border-radius: 3px; background: var(--c, var(--orange)); }
+.sheet ul { list-style: none; margin: 0; padding: 0; }
+.sheet li { display: grid; grid-template-columns: 1fr auto; gap: 4px 20px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.sheet ul li:last-child { border-bottom: 0; }
+.sheet .nm { font-weight: 700; font-size: 1.05rem; }
+.sheet .ds { grid-column: 1; color: var(--muted); font-size: .93rem; }
+.sheet .pr { grid-row: 1 / span 2; grid-column: 2; align-self: center; font: 800 1.45rem/1 var(--display); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.sheet .base { background: var(--soft); border-radius: 16px; padding: 18px 20px; border: 0; }
+.sheet .tag { display: inline-block; margin-left: 8px; padding: 3px 9px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); font-size: .72rem; font-weight: 600; color: var(--muted); vertical-align: 2px; }
+.order { grid-template-columns: 1fr; position: sticky; top: 110px; display: grid; gap: 22px; padding: 32px; border-radius: var(--r); background: #0b2348; color: #fff; box-shadow: 0 30px 70px -40px rgba(11,35,72,.7); }
+.order h3 { font: 800 1.35rem/1.2 var(--display); margin: 0; color: #fff; }
+.order ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; counter-reset: s; }
+.order li { display: grid; grid-template-columns: 30px 1fr; gap: 12px; align-items: start; color: #d7e1f0; counter-increment: s; }
+.order li::before { content: counter(s); display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--orange); color: #fff; font: 800 .9rem/1 var(--display); }
+.order li strong { color: #fff; display: block; }
+.order .btn { width: 100%; justify-content: center; min-height: 58px; font-size: 1.08rem; background: var(--orange); border-color: var(--orange); color: #fff; }
+.order .fine { margin: -10px 0 0; text-align: center; font-size: .85rem; color: #9fb0c8; }
+.order .note { border-top: 1px solid rgba(255,255,255,.14); padding-top: 18px; font-size: .93rem; color: #d7e1f0; }
+.order .note strong { color: #fff; }
+.order .note a { color: #fff; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; word-break: break-word; }
 </style>
-<div class="plist">
-<h3>Your table</h3>
-<ul><li><span class="nm">Exhibitor table<span class="ds">A 6-foot table, two chairs, and a free listing in the printed fair directory.</span></span><span class="pr">$400</span></li></ul>
-<h3>Optional directory ads</h3>
-<ul><li><span class="nm">Quarter-page ad<span class="ds">2.375 x 3.875 in, printed directory</span></span><span class="pr">+$75</span></li><li><span class="nm">Half-page ad<span class="ds">5 x 3.875 in, printed directory</span></span><span class="pr">+$125</span></li><li><span class="nm">Full-page ad<span class="ds">5 x 8 in, printed directory</span></span><span class="pr">+$225</span></li></ul>
-<h3>Optional sponsorships</h3>
-<ul><li><span class="nm">Gold sponsorship<span class="ds">Your banner at the fair plus placement on the website home page. Limited to 6.</span></span><span class="pr">+$200</span></li><li><span class="nm">Platinum sponsorship<span class="ds">Placement in every family email plus the website home page. Limited to 3.</span></span><span class="pr">+$400</span></li></ul>
-</div>
-<div class="cta"><a class="btn big" data-link="signupForm" href="#">Reserve your table</a><p class="small-note">Takes about 5 minutes. Have your program description ready.</p></div>
-<div class="art-note"><strong>Buying an ad or a sponsorship?</strong> Email your ad or sponsor artwork to <a href="mailto:joe@summeropportunityfair.com">joe@summeropportunityfair.com</a> by <strong>January 11, 2027</strong>. You can also upload it in the sign-up form.</div>
-<div class="ach"><span class="ic" aria-hidden="true">ACH</span><div><h3>Pay by bank if you can</h3><p>Bank transfer keeps fees, and table prices, low.</p></div></div>
-</div></section>
-<section class="band"><div class="wrap two">
-<div><h2>Directory ad sizes</h2><div class="tbl"><table><thead><tr><th>Ad</th><th>Size</th><th class="num">Price</th></tr></thead><tbody><tr><td>Quarter-page ad</td><td>2.375 x 3.875 in</td><td class='num'>$75</td></tr><tr><td>Half-page ad</td><td>5 x 3.875 in</td><td class='num'>$125</td></tr><tr><td>Full-page ad</td><td>5 x 8 in</td><td class='num'>$225</td></tr></tbody></table></div>
-<p class="small-note">The directory is a 5.5 x 8.5 in booklet. Send a print-ready PDF or high-resolution image by January 11, 2027. Need help with a design? Ask us.</p></div>
-<div><h2>Payment terms</h2><ul class="talks"><li>Your table is confirmed once payment clears. You&#x27;ll get a receipt by email.</li><li>Bank transfer (ACH) at checkout is preferred. It keeps table prices low.</li><li>Gold and Platinum are upgrades for exhibitors and are first come, first served.</li><li>Send your listing details in the sign-up form. Upload your ad there too, or email it by January 11, 2027.</li><li>Full refund until 30 days before the fair. If the fair is snowed out, your table moves to the snow date or you get a full refund.</li></ul></div>
-</div></section>
-<section class="band"><div class="wrap two">
-<div><h2>Local business?</h2><p class="small-note">Pediatric practices, banks, realtors and other local businesses can sponsor the whole fair. Ask about presenting sponsorship at joe@summeropportunityfair.com.</p><a class="btn ghost" data-link="contact" href="#">Ask about sponsorship</a></div>
-<div><h2>Need an invoice?</h2><p class="small-note">Schools, districts and nonprofits can pay by check or ACH invoice. Email joe@summeropportunityfair.com.</p><a class="btn ghost" data-link="contact" href="#">Request an invoice</a></div>
-</div></section>
-</main>
-<footer class="foot"><div class="wrap foot-in">
-<div><a class="brand" href="index.html"><img class="brand-tiles" src="logo-tiles.png" alt="" width="82" height="20"><span>Summer Opportunity Fair</span></a>
-<p>Late February 2027 · Northern Westchester. Free for families. Presented by Resource Commons.</p><p>Questions? joe@summeropportunityfair.com</p></div>
-<div class="foot-links"><a href="index.html#rsvp">RSVP free</a><a href="exhibit.html">Exhibit or sponsor</a><a href="https://resourcecommons.com">Resource Commons</a></div>
-</div></footer>
-<script src="config.js"></script>
-<script src="site.js"></script>
-</body>
-</html>
+<div class="ex-grid">
+<div class="sheet">
+<h3 style="--c: var(--orange)">Your table</h3>
+<ul><li class="base"><span class="nm">Exhibitor table<span class="tag">Includes free directory listing</span></span><span class="ds">A 6-foot table and two chairs.</span><span class="pr">$400</span></li></ul>
+<h3 style="--c: var(--blue)">Directory ads <span style="text-transform:none;letter-spacing:0;font-weight:600">· optional</span></h3>
+<ul><li><span class="nm">Quarter-page ad</span><span class="ds">2.375 x 3.875 in</span><span class="pr">+$75</span></li><li><span class="nm">Half-page ad</span><span class="ds">5 x 3.875 in</span><span class="pr">+$125</span></li><li><span class="nm">Full-page ad</span><span class="ds">5 x 8 in</span><span class="pr">+$225</span></li></ul>
+<h3 style="--c: var(--purple)">Sponsorships
