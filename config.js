@@ -15,6 +15,22 @@ window.SOF = {
     GOLD: "https://buy.stripe.com/fZu14n8nA3kA7rM4SL8og02",
     PLATINUM: "https://buy.stripe.com/9B6aEXdHUf3i9zU70T8og01"
   },  // PREORDER = Stripe link for the $15 directory pre-order ("SOF27 Directory pre-order")
+  // One Stripe Payment Link per table bundle, so the whole order lands in the cart.
+  // Leave a bundle blank and checkout falls back to the table-only link.
+  signupForm: "https://tally.so/r/J1lzGd",  // Tally exhibitor form
+  bundle: {
+    "TABLE-GOLD": "",
+    "TABLE-PLATINUM": "",
+    "TABLE-QUARTER": "",
+    "TABLE-QUARTER-GOLD": "",
+    "TABLE-QUARTER-PLATINUM": "",
+    "TABLE-HALF": "",
+    "TABLE-HALF-GOLD": "",
+    "TABLE-HALF-PLATINUM": "",
+    "TABLE-FULL": "",
+    "TABLE-FULL-GOLD": "",
+    "TABLE-FULL-PLATINUM": "",
+  },
   // After checkout, Stripe should send camps here to submit listing details and ad artwork:
   listingForm: "",
 };
