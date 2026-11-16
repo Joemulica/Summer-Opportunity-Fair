@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Exhibit · Summer Opportunity Fair</title>
 <meta name="description" content="Reserve an exhibitor table, directory ad or sponsorship for the Summer Opportunity Fair in Westchester.">
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Geist:wght@400;500;600&display=swap">
@@ -24,6 +23,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://summeropportunityfair.com/og-image.png">
 <link rel="stylesheet" href="style.css">
+<style>.btn.big { min-height: 58px; padding: 0 34px; font-size: 1.08rem; }</style>
 </head>
 <body>
 <header class="top"><div class="wrap top-in">
@@ -37,28 +37,19 @@
 <p class="lede">Camps, classes and teen programs get a table in front of Westchester families at the moment they're choosing. Every exhibitor gets a free listing in the printed fair directory.</p>
 </div></div></section>
 <section class="band"><div class="wrap">
-<div class="sec-h"><p class="kicker">Reserve your table</p><h2>Build your order</h2><p>Pick your add-ons, then pay once at secure checkout.</p></div>
-<div class="order">
-<form class="steps" id="order" novalidate>
-<fieldset class="step"><legend><span class="n">1</span>Exhibitor table</legend>
-<label class="pick on"><input type="checkbox" checked disabled id="tbl"><span class="pick-b"><strong>Exhibitor table</strong><span>A 6-foot table, two chairs, and a free listing in the printed fair directory.</span></span><span class="pick-p">$400</span></label></fieldset>
-<fieldset class="step"><legend><span class="n">2</span>Featured ad in the printed directory <em>optional</em></legend><label class="pick"><input type="radio" name="ad" value="" data-price="0" id="ad-none" checked><span class="pick-b"><strong>No ad</strong><span>Free listing only</span></span><span class="pick-p">$0</span></label><label class="pick"><input type="radio" name="ad" value="QUARTER" data-price="75" id="ad-quarter"><span class="pick-b"><strong>Quarter-page ad</strong><span>2.375 x 3.875 in</span></span><span class="pick-p">$75</span></label><label class="pick"><input type="radio" name="ad" value="HALF" data-price="125" id="ad-half"><span class="pick-b"><strong>Half-page ad</strong><span>5 x 3.875 in</span></span><span class="pick-p">$125</span></label><label class="pick"><input type="radio" name="ad" value="FULL" data-price="225" id="ad-full"><span class="pick-b"><strong>Full-page ad</strong><span>5 x 8 in</span></span><span class="pick-p">$225</span></label></fieldset>
-<fieldset class="step"><legend><span class="n">3</span>Sponsorship <em>optional</em></legend><label class="pick"><input type="radio" name="sp" value="" data-price="0" id="sp-none" checked><span class="pick-b"><strong>No sponsorship</strong><span>&nbsp;</span></span><span class="pick-p">$0</span></label><label class="pick"><input type="radio" name="sp" value="GOLD" data-price="200" id="sp-gold"><span class="pick-b"><strong>Gold sponsorship</strong><span>Your banner at the fair plus placement on the website home page. 6 spots.</span></span><span class="pick-p">$200</span></label><label class="pick"><input type="radio" name="sp" value="PLATINUM" data-price="400" id="sp-platinum"><span class="pick-b"><strong>Platinum sponsorship</strong><span>Placement in every family email plus the website home page. 3 spots.</span></span><span class="pick-p">$400</span></label></fieldset>
-</form>
-<aside class="summary" aria-live="polite">
-<h3>Your order</h3>
-<ul id="sum-lines"></ul>
-<div class="sum-total"><span>Total</span><strong id="sum-total">$400</strong></div>
-<a class="btn" id="checkout" data-link="pay-TABLE" href="#">Continue to checkout</a>
-<p class="small-note" id="sum-note">On the next page, tick the same add-ons under the table to pay for everything at once. Card or bank transfer.</p>
-</aside>
+<div class="sec-h"><p class="kicker">Reserve your table</p><h2>One form, one payment</h2><p>Reserve your table, send your free directory listing, pick any add-ons and upload your ad, all in one form. You pay once at the end.</p></div>
+<div class="opts">
+<div class="opt table-opt"><div class="opt-h"><h3>Exhibitor table</h3><span class="opt-p">$400</span></div><p>A 6-foot table, two chairs, and a free listing in the printed fair directory.</p></div>
+<div class="opt"><div class="opt-h"><h3>Quarter-page ad</h3><span class="opt-p">+$75</span></div><p>2.375 x 3.875 in, printed directory. Optional.</p></div><div class="opt"><div class="opt-h"><h3>Half-page ad</h3><span class="opt-p">+$125</span></div><p>5 x 3.875 in, printed directory. Optional.</p></div><div class="opt"><div class="opt-h"><h3>Full-page ad</h3><span class="opt-p">+$225</span></div><p>5 x 8 in, printed directory. Optional.</p></div>
+<div class="opt"><div class="opt-h"><h3>Gold sponsorship</h3><span class="opt-p">+$200</span></div><p>Your banner at the fair plus placement on the website home page.</p><span class="pill cap">6 spots</span></div><div class="opt"><div class="opt-h"><h3>Platinum sponsorship</h3><span class="opt-p">+$400</span></div><p>Placement in every family email plus the website home page.</p><span class="pill cap">3 spots</span></div>
 </div>
+<div class="cta"><a class="btn big" data-link="signupForm" href="#">Reserve your table</a><p class="small-note">Takes about 5 minutes. Have your program description and ad file ready.</p></div>
 <div class="ach"><span class="ic" aria-hidden="true">ACH</span><div><h3>Pay by bank if you can</h3><p>Bank transfer keeps fees, and table prices, low.</p></div></div>
 </div></section>
 <section class="band"><div class="wrap two">
 <div><h2>Directory ad sizes</h2><div class="tbl"><table><thead><tr><th>Ad</th><th>Size</th><th class="num">Price</th></tr></thead><tbody><tr><td>Quarter-page ad</td><td>2.375 x 3.875 in</td><td class='num'>$75</td></tr><tr><td>Half-page ad</td><td>5 x 3.875 in</td><td class='num'>$125</td></tr><tr><td>Full-page ad</td><td>5 x 8 in</td><td class='num'>$225</td></tr></tbody></table></div>
 <p class="small-note">The directory is a 5.5 x 8.5 in booklet. Send a print-ready PDF or high-resolution image by February 1, 2027. Need help with a design? Ask us.</p></div>
-<div><h2>Payment terms</h2><ul class="talks"><li>Your table is confirmed once payment clears. You&#x27;ll get a receipt by email.</li><li>Bank transfer (ACH) at checkout is preferred. It keeps table prices low.</li><li>Gold and Platinum are upgrades for exhibitors and are first come, first served.</li><li>Listing details and ad artwork are due February 1, 2027. We&#x27;ll email you after checkout to collect them.</li><li>Full refund until 30 days before the fair. If the fair is snowed out, your table moves to the snow date or you get a full refund.</li></ul></div>
+<div><h2>Payment terms</h2><ul class="talks"><li>Your table is confirmed once payment clears. You&#x27;ll get a receipt by email.</li><li>Bank transfer (ACH) at checkout is preferred. It keeps table prices low.</li><li>Gold and Platinum are upgrades for exhibitors and are first come, first served.</li><li>Send your listing details in the sign-up form. Upload your ad there too, or email it by February 1, 2027.</li><li>Full refund until 30 days before the fair. If the fair is snowed out, your table moves to the snow date or you get a full refund.</li></ul></div>
 </div></section>
 <section class="band"><div class="wrap two">
 <div><h2>Local business?</h2><p class="small-note">Pediatric practices, banks, realtors and other local businesses can sponsor the whole fair. Ask about presenting sponsorship at joe@summeropportunityfair.com.</p><a class="btn ghost" data-link="contact" href="#">Ask about sponsorship</a></div>
